@@ -1,0 +1,21 @@
+- name: edit sysconfig
+  lineinfile:
+    path: "{{ item.path | default('/etc/sysctl.conf') }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    create: yes
+    state: present
+  with_items:
+    - regexp: ^fs.file-max
+      line: fs.file-max = 500000
+    - regexp: ^root soft
+      line: root soft nofile 10000
+      path: /etc/security/limits.d/root.conf
+    - regexp: ^root hard
+      line: root hard nofile 30000
+      path: /etc/security/limits.d/root.conf
+
+- include: network.yml
+
+- name: apply sysctl configuration
+  shell: sysctl -p

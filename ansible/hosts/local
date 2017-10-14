@@ -1,0 +1,23 @@
+# split into multiple componts
+
+[nginx]
+127.0.0.1
+
+[redis]
+127.0.0.1
+
+[mysql]
+127.0.0.1
+
+[app]
+127.0.0.1
+
+[personal]
+127.0.0.1
+
+[local:children]
+mysql
+redis
+nginx
+app
+personal

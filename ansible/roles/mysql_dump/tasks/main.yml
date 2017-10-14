@@ -1,0 +1,4 @@
+---
+
+- name: write dump data
+  shell: "mysql -u root < {{ ansible_env.PWD }}/../bkup/mysqldump2"

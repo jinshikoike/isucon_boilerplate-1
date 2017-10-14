@@ -1,0 +1,62 @@
+- name: edit sysconfig
+  lineinfile:
+    path: "{{ item.path | default('/etc/sysctl.conf') }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    create: yes
+    state: present
+  with_items:
+    - regexp: ^net.ipv4.ip_local_port_range
+      line: net.ipv4.ip_local_port_range = 10000 65535
+
+    - regexp: ^net.ipv4.conf.default.accept_source_route
+      line: net.ipv4.conf.default.accept_source_route = 0
+
+    - regexp: ^net.ipv4.tcp_rfc1337
+      line: net.ipv4.tcp_rfc1337=1
+
+    - regexp: ^net.ipv4.tcp_slow_start_after_idle
+      line: net.ipv4.tcp_slow_start_after_idle = 0
+
+    - regexp: ^net.ipv4.tcp_keepalive_probes
+      line: net.ipv4.tcp_keepalive_probes=5
+
+    - regexp: ^net.ipv4.tcp_keepalive_time
+      line: net.ipv4.tcp_keepalive_time=10
+
+    - regexp: ^net.ipv4.tcp_keepalive_intvl
+      line: net.ipv4.tcp_keepalive_intvl=2
+
+    # TIME_WAITE
+    - regexp: ^net.ipv4.tcp_tw_recycle
+      line: net.ipv4.tcp_tw_recycle = 0
+
+    - regexp: ^net.ipv4.tcp_tw_reuse
+      line: net.ipv4.tcp_tw_reuse = 1
+
+    - regexp: ^net.ipv4.tcp_fin_timeout
+      line: net.ipv4.tcp_fin_timeout = 10
+
+    # window scaling
+    - regexp: ^net.ipv4.tcp_window_scaling
+      line: net.ipv4.tcp_window_scaling = 1
+
+    # buffer size
+    - regexp: ^net.ipv4.tcp_mem
+      line: net.ipv4.tcp_mem = "4096 87380 16777216"
+    - regexp: ^net.ipv4.tcp_rmem
+      line: net.ipv4.tcp_rmem = "4096 87380 16777216"
+    - regexp: ^net.ipv4.tcp_wmem
+      line: net.ipv4.tcp_wmem = "4096 87380 16777216"
+    - regexp: ^net.core.rmem_max
+      line: net.core.rmem_max = 16777216
+    - regexp: ^net.core.wmem_max
+      line: net.core.wmem_max = 16777216
+
+    # queing
+    - regexp: ^net.core.somaxconn
+      line: net.core.somaxconn=65535
+    - regexp: ^net.core.netdev_max_backlog
+      line: net.core.netdev_max_backlog = 10240
+    - regexp: ^net.ipv4.tcp_max_syn_backlog
+      line: net.ipv4.tcp_max_syn_backlog = 10240

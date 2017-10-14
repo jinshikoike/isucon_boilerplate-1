@@ -1,0 +1,101 @@
+---
+
+- name: craete directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: nginx
+    group: root
+    recurse: yes
+  with_items:
+    - "/etc/nginx/sites-enabled"
+    - "/etc/nginx/sites-available"
+
+- name: check nginx exists
+  stat:
+    path: /etc/nginx
+  register: nginx
+
+- name: check nginx_backup exists
+  stat:
+    path: /etc/nginx_backup
+  register: nginx_backup
+
+- name: backup nginx
+  shell: cp -r /etc/nginx /etc/nginx_backup
+  when: 
+    - nginx.stat.exists
+    - not nginx_backup.stat.exists
+
+- name: configure file
+  block:
+    - name: remove /etc/nginx/nginx.conf
+      file:
+        path: /etc/nginx/nginx.conf
+        state: absent
+
+    - name: template nginx.conf
+      template:
+        src: templates/mynginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+
+    - name: upload isucon.conf
+      template:
+        src: isucon.conf
+        dest: /etc/nginx/sites-available
+
+    - name: remove /etc/nginx/site-enabled/default
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: symbolic link from sites_available to sites_enabled
+      file:
+        state: link
+        src: "/etc/nginx/sites-available/isucon.conf"
+        path: "/etc/nginx/sites-enabled/isucon.conf"
+      notify:
+        - reload nginx
+
+- name: install sample project
+  block:
+    - name: create host directory
+      file:
+        path: /var/www
+        state: directory
+        mode: 0755
+        owner: nginx
+        group: root
+        recurse: yes
+
+    - name: copy sample project
+      copy:
+        src: sample
+        dest: /var/www
+        mode: 0755
+        owner: nginx
+        group: root
+
+    - name: upload sample.conf
+      template:
+        src: sample.conf
+        dest: /etc/nginx/sites-available
+
+    - name: remove /etc/nginx/site-enabled/default
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: symbolic link from sites_available to sites_enabled
+      file:
+        state: link
+        src: "/etc/nginx/sites-available/sample.conf"
+        path: "/etc/nginx/sites-enabled/sample.conf"
+      notify:
+        - reload nginx
+
+  when: create_sample_project
+
+
+

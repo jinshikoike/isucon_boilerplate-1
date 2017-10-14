@@ -1,0 +1,73 @@
+- name: include_vars
+  include_vars:
+    file: "{{ item }}"
+  with_first_found:
+    - files:
+      - group_vars/secret_personal_var.yml
+      skip: true
+
+- name: create user
+  user:
+    name: "{{ user.name }}"
+    group: "{{ user.group }}"
+    # this is unnecessary
+    generate_ssh_key: true
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  when: user is defined
+
+- name: git clone each users tools
+  git:
+    repo: "{{ item.repo }}"
+    dest: "/home/{{ user.name }}{{ item.dest | default(item.repo) | regex_replace('^.*/(.*).git$', '/\\1') }}"
+    force: true
+    version: master
+  with_items: "{{ user.git_repos }}"
+  when: user.git_repos is defined
+
+- name: upload personal files
+  copy:
+    src: "files/secrets/"
+    dest: "/home/{{ user.name }}/secrets"
+    owner: "{{ user.name }}"
+    mode: 755
+    group: "{{ user.group }}"
+  with_first_found:
+    - files: "files/secrets/"
+      skip: true
+  when: user is defined
+
+# Setup/install tasks.
+- include: profile-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: profile-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: run commands on the user
+  shell: "{{ item }}"
+  # args:
+  #   chdir: "/home/{{ user.name }}"
+  with_items: "{{ user.run_commands }}"
+  when: user.run_commands is defined
+
+- name: check golang exist
+  stat:
+    path: /usr/local/go/bin
+  register: golang
+    
+- name: install golang
+  block: 
+    - name: download golang        
+      get_url:
+        url: https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz
+        dest: /tmp/golang
+        checksum: sha256:07d81c6b6b4c2dcf1b5ef7c27aaebd3691cdb40548500941f92b221147c5d9c7
+
+    - name: unzip golang package
+      unarchive:
+        src: /tmp/golang
+        dest: /usr/local
+        mode: 0755
+    
+  when: not golang.stat.exists

@@ -1,0 +1,7 @@
+isuda
+isutar
+
+# Mac common 
+.DS_Store
+.vagrant/
+ubuntu-xenial-16.04*

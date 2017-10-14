@@ -1,0 +1,70 @@
+- name: "install basic packages"
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ common_packages }}"
+  when: "ansible_os_family == 'RedHat'"
+- name: "install basic packages"
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ common_packages }}"
+  when: "ansible_os_family == 'Debian'"
+- name: "install basic packages"
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - build-essential
+  when: "ansible_os_family == 'Debian'"
+
+- name: create nginx group
+  group:
+    name: "nginx"
+    state: present
+    
+- name: create user
+  user:
+    name: "nginx"
+    group: "nginx"
+# - name: create user
+#   user:
+#     name: "{{ item.name }}"
+#     group: "wheel"
+#     # this is unnecessary
+#     generate_ssh_key: true
+#     ssh_key_bits: 2048
+#     ssh_key_file: .ssh/id_rsa
+#   with_items: "{{ users }}"
+
+# - name: add authorized key
+#   vars:
+#     pub_key: "{{ item.pub_key }}"
+#   template:
+#     src: authorized_keys
+#     dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+#     mode: 0600
+#   with_items: "{{ users }}"
+
+# - name: git clone each users tools
+#   git:
+#     repo: "{{ item.1.repo }}"
+#     dest: "/home/{{ item.0.name }}{{ item.1.dest | default(item.1.repo) | regex_replace('^.*/(.*).git$', '/\\1') }}"
+#     force: true
+#     version: master
+#   with_subelements:
+#     - "{{ users }}"
+#     - git_repos
+#     - flags:
+#       skip_missing: true
+
+# - name: upload personal files
+#   copy:
+#     src: "secrets/{{ item.name }}/"
+#     dest: "/home/{{ item.name }}/secrets"
+#     owner: "{{ item.name }}"
+#     group: "wheel"
+#   with_first_found:
+#     - files: "secrets/{{ ansible_env.HOME }}/"
+#       skip: true
+#   with_items: "{{ users }}"

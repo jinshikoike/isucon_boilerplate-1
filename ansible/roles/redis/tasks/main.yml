@@ -1,0 +1,121 @@
+---
+
+- name: create redis group
+  group:
+    name: redis
+
+- name: create redis redis user
+  user:
+    name: redis
+    group: redis
+
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: redis
+    group: root
+    recurse: yes
+  with_items:
+    - "/var/log/redis"
+    - "/run/redis"
+    - "/etc/redis"
+
+- name: get redis-server file facts
+  stat:
+    path: /usr/bin/redis-server
+  register: redis_server_file
+
+- name: install redis
+  block:
+    - name: download latest-stable redis
+      get_url:
+        url: http://download.redis.io/redis-stable.tar.gz
+        dest: /tmp/redis.tar.gz
+        mode: 700
+
+    - name: tar xvzf redis.tar.gz
+      unarchive:
+        dest: /tmp
+        remote_src: yes
+        src: /tmp/redis.tar.gz
+
+    - name: make redis
+      make:
+        chdir: /tmp/redis-stable
+
+    - name: pass the path
+      copy:
+        dest: "/usr/bin/{{ item }}"
+        remote_src: yes
+        src: "/tmp/redis-stable/src/{{ item }}"
+      with_items:
+        - redis-server
+        - redis-cli
+
+    - name: chmod 755 to redis executables
+      file:
+        path: "/usr/bin/{{ item }}"
+        mode: 0755
+      with_items:
+        - redis-server
+        - redis-cli
+
+    - name: delete redis folder
+      file:
+        state: absent
+        path: "{{ item }}"
+      with_items:
+        - "/tmp/redis-stable"
+        - "/tmp/redis.tar.gz"
+
+  when: not redis_server_file.stat.exists
+
+- name: template redis.service
+  template:
+    src: redis.service.j2
+    dest: "/lib/systemd/system/redis.service"
+    mode: 0644
+    owner: root
+    group: root
+  when: "ansible_os_family == 'Debian'"
+
+- name: template redis.service
+  template:
+    src: redis.service.j2
+    dest: "/usr/lib/systemd/system/redis.service"
+    mode: 0644
+    owner: root
+    group: root
+  when: "ansible_os_family == 'RedHat'"
+
+- name: check nginx exists
+  stat:
+    path: /etc/redis/redis.conf
+  register: redis_conf_file
+
+- name: template redis.conf
+  template:
+    src: "redis.conf.j2"
+    dest: "/etc/redis/redis.conf"
+    mode: 0755
+    owner: redis
+    group: root
+  when: not redis_conf_file.stat.exists
+
+- name: enable and start redis
+  systemd:
+    name: redis
+    enabled: yes
+    state: started
+
+- name: template redis.conf
+  template:
+    src: "redis.conf.j2"
+    dest: "/etc/redis/redis.conf"
+    mode: 0755
+    owner: redis
+    group: root
+  notify:
+    - redis reload

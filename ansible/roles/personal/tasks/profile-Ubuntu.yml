@@ -1,0 +1,10 @@
+---
+
+- name: edit sysconfig
+  lineinfile:
+    path: "/home/{{ user.name }}/.profile"
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+    create: yes
+    state: present
+  with_items: "{{ user.profile_lines }}"

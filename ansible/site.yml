@@ -1,0 +1,7 @@
+---
+
+- include: os_tuning.yml
+- include: nginx.yml
+- include: redis.yml
+- include: mysql.yml
+- include: personal.yml

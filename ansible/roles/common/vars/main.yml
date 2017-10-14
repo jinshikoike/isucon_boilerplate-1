@@ -1,0 +1,17 @@
+users:
+  - name: kf
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDH+HHxNMMiGXIB4hwE7s8u3hdUiW37ON/XApnjiIStgPP6uA0+jhvvoAXqvV7Taxkp4sXXsbSsrPvIaEHoIS6m9HwjrUebvLsWhHohzFh/GG2GUAwYf36RURRwNX11g+9iBQtFmmBCELSRXjbIG48rQcmJS/CleHWKkmBJRhX1T48pys9HKTGOECJS63h4nfNQ5tSaKL7DQERimyOxMztg57mZsT2Gt/pvEjYL6/r1qEYUC2D758bdDGUGPSc2T1AYMAsmAOvvXlyPftd4g49qecqVJe8Bl23UGc5oKQLV5quV1S2rMTH9XtYhp0/QhmnagBLJ5zYPjHFjeUdM1b3H ansible-generated on localhost.localdomain"
+
+  - name: tanishi
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDH+HHxNMMiGXIB4hwE7s8u3hdUiW37ON/XApnjiIStgPP6uA0+jhvvoAXqvV7Taxkp4sXXsbSsrPvIaEHoIS6m9HwjrUebvLsWhHohzFh/GG2GUAwYf36RURRwNX11g+9iBQtFmmBCELSRXjbIG48rQcmJS/CleHWKkmBJRhX1T48pys9HKTGOECJS63h4nfNQ5tSaKL7DQERimyOxMztg57mZsT2Gt/pvEjYL6/r1qEYUC2D758bdDGUGPSc2T1AYMAsmAOvvXlyPftd4g49qecqVJe8Bl23UGc5oKQLV5quV1S2rMTH9XtYhp0/QhmnagBLJ5zYPjHFjeUdM1b3H ansible-generated on localhost.localdomain"
+    
+  - name: jinshi
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDH+HHxNMMiGXIB4hwE7s8u3hdUiW37ON/XApnjiIStgPP6uA0+jhvvoAXqvV7Taxkp4sXXsbSsrPvIaEHoIS6m9HwjrUebvLsWhHohzFh/GG2GUAwYf36RURRwNX11g+9iBQtFmmBCELSRXjbIG48rQcmJS/CleHWKkmBJRhX1T48pys9HKTGOECJS63h4nfNQ5tSaKL7DQERimyOxMztg57mZsT2Gt/pvEjYL6/r1qEYUC2D758bdDGUGPSc2T1AYMAsmAOvvXlyPftd4g49qecqVJe8Bl23UGc5oKQLV5quV1S2rMTH9XtYhp0/QhmnagBLJ5zYPjHFjeUdM1b3H ansible-generated on localhost.localdomain"
+    git_repos:
+      - repo: "https://github.com/jinshikoike/dotfile.git"
+        dest: "/.dotfiles"
+      - repo: "https://github.com/jinshikoike/dotfile.git"
+    # this is called after secrets file is uploaded
+    run_commands:
+      - "echo './secrets/bash_profile_extension.sh' >> /home/jinshi/.bash_profile"
+      - "echo $TEST_ENV"

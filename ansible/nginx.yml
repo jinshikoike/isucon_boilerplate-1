@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  become: true
+  become_user: root
+  # gather_facts: False
+  vars:
+    nginx_conf_template: templates/mynginx.conf.j2
+  roles:
+    - common
+    - nginx
+    - custom_nginx

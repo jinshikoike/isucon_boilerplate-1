@@ -1,0 +1,9 @@
+.DS_Store
+
+files/secrets/*
+
+*.retry
+
+/galaxy
+
+secret_personal_var.yml

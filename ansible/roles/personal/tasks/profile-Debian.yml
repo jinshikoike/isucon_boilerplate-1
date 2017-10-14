@@ -1,0 +1,20 @@
+---
+
+- name: edit sysconfig
+  lineinfile:
+    path: "/home/{{ user.name }}/.profile"
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+    create: yes
+    state: present
+  with_items: "{{ user.profile_lines }}"
+
+# - name: add common line
+#   lineinfile:
+#     path: "/home/{{ user.name }}/.profile"
+#     regexp: "{{ item }}"
+#     line: "{{ item }}"
+#     create: yes
+#     state: present
+#   with_items: "{{ local.environemnt_variables }}"
+#   when: local.environemnt_variables is defined

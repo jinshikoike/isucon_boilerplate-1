@@ -1,0 +1,7 @@
+---
+
+- name: redis reload
+  systemd:
+    name: redis
+    daemon_reload: yes
+    state: reloaded

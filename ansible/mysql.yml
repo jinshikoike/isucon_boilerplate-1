@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  become: true
+  become_user: root
+  gather_facts: True
+  vars:
+    mysql_user_home: /root
+    mysql_user_name: root
+    mysql_port: "3306"
+    mysql_user_password: 'root'
+    mysql_enabled_on_startup: yes
+    mysql_root_password_update: yes
+  roles:
+    - mysql
+    - mysql_dump
