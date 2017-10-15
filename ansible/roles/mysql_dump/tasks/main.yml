@@ -2,9 +2,9 @@
 
 - name: mysqldump
   stat:
-    path: "{{ ansible_env.PWD }}/../bkup/mysqldump"
+    path: "{{ ansible_env.PWD }}/../bkup/mysqldump.sql"
   register: mysqldump
 
 - name: write dump data
-  shell: "mysql -u root < {{ ansible_env.PWD }}/../bkup/mysqldump"
+  shell: "mysql -u root < {{ ansible_env.PWD }}/../bkup/mysqldump.sql"
   when: mysqldump.stat.exists
