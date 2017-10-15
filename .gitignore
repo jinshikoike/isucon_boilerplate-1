@@ -1,7 +1,51 @@
 isuda
 isutar
 
-# Mac common 
+# Mac common
 .DS_Store
 .vagrant/
 ubuntu-xenial-16.04*
+
+# vim
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+
+.viminfo
+
+# 各言語
+*/js
+*/perl
+*/php
+*/python
+*/ruby
+*/scala
+.gem/
+.node-gyp/
+.npm/
+.local/
+*/node
+.xslate_cache/
+.xbuild/
+.bundle/
+.cache/
+.composer/
+.cpanm/
+
+# ssh
+.ssh/
+
+# other
+.sudo_as_admin_successful
+
