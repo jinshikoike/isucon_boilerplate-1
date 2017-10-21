@@ -16,7 +16,7 @@ type Logger struct {
 
 var file = Initialize()
 
-func MeasureStart(comment string) *Field {
+func MeasureStart(comment string) *Logger {
 	now := time.Now()
 
 	logger := Logger{
