@@ -71,5 +71,21 @@
         dest: /usr/local
         remote_src: yes
         mode: 0755
-    
+
   when: not golang.stat.exists
+
+- name: set GOPATH
+  lineinfile:
+    path: "/home/{{ user.name }}/.profile"
+    regexp: "export GOPATH=/home/{{ user.name }}/go"
+    line: "export GOPATH=/home/{{ user.name }}/go"
+    create: yes
+    state: present
+    
+- name: add GOPATH to PATH
+  lineinfile:
+    path: "/home/{{ user.name }}/.profile"
+    regexp: "export PATH=/home/{{ user.name }}/go/bin:$PATH"
+    line: "export PATH=/home/{{ user.name }}/go/bin:$PATH"
+    create: yes
+    state: present

@@ -1,19 +1,19 @@
 # split into multiple componts
 
 [nginx]
-163.43.30.197
+163.43.30.146
 
 [redis]
-163.43.30.197
+163.43.30.146
 
 [mysql]
-163.43.30.197
+163.43.30.146
 
 [app]
-163.43.30.197
+163.43.30.146
 
 [personal]
-163.43.30.197
+163.43.30.146
 
 [production:children]
 mysql
@@ -23,4 +23,4 @@ app
 personal
 
 [vars]
-163.43.30.197 ansible_connection=ssh ansible_user=isucon ansible_port=22 ansible_ssh_private_key_file=~/.ssh/id_rsa/id_rsa ansible_sudo_pass=miki1123
+163.43.30.146 ansible_connection=ssh ansible_user=isucon ansible_port=22 ansible_ssh_private_key_file=~/.ssh/id_rsa/id_rsa ansible_sudo_pass=miki1123

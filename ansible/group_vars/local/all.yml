@@ -11,6 +11,14 @@ user:
   #   - repo: "https://github.com/jinshikoike/dotfile.git"
 
   profile_lines:
+    - export ISUDA_DB_HOST="127.0.0.1"
+    - export ISUDA_DB_USER="root"
+    - export ISUDA_DB_PASSWORD="root"
+
+    - export ISUTAR_DB_HOST="127.0.0.1"
+    - export ISUTAR_DB_USER="root"
+    - export ISUTAR_DB_PASSWORD="root"
+
     - export DB_HOST="127.0.0.1"
     - export DB_USER="root"
     - export DB_PASSWORD="root"
